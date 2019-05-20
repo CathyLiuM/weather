@@ -1,0 +1,12 @@
+<view class="weather-wrapper">
+  <view class="temp">{{temp}}</view>
+  <view class="weather">{{weather}}</view>
+  <image class='weather-bg' src="{{nowWeatherBackground}}" mode="scallToFill"></image>
+</view>
+
+<view class="timetips">
+  <image class="timetips-icon" src="/images/time-icon.png"></image>
+  <view class='timetips-text'>未来24小时天气预测</view>
+</view>
+
+<view wx:for="{{[1,2,3,4,5]}}">{{item}}</view>

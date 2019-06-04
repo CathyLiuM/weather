@@ -5,10 +5,23 @@ Page({
     city: '广州市'
   },
   onLoad: function (options) {
+    console.log('onLoad')
     this.setData({
       city: options.city
     })
     this.getWeekWeather()
+  },
+  onReady() {
+    console.log("onReady")
+  },
+  onHide() {
+    console.log('onHide')
+  },
+  onUnload() {
+    console.log('onUnload')
+  },
+  onShow() {
+    console.log('onShow')
   },
   getWeekWeather(callback){
     let that = this;

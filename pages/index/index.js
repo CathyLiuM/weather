@@ -43,27 +43,36 @@ Page({
     });
   },
   onLoad(){
+    console.log("onLoad")
     this.qqmapsdk = new QQMapWX({
       key: 'HCLBZ-K23WX-UD44O-ZVIY3-RRKDF-UYBXJ'
     });
-    this.getNow();
-  },
-  onShow(){
     wx.getSetting({
-      success: res=> {
-        let auth = res.authSetting['scope.userLocation']
-        console.log(auth)
-        if(auth&&this.data.locationAuthType!=AUTHORIZED){
-          //权限从无到有
-          this.setData({
-            locationAuthType: AUTHORIZED,
-            locationTipsText: AUTHORIZED_TIPS
-          })
-          this.getLocation()
+      success: res => {
+        let auth = res.authSetting["scope.userLocation"];
+        this.setData({
+          locationAuthType : auth ? AUTHORIZED :
+            (auth === false) ? UNAUTHORIZED : UNPROMPTED,
+          locationTipsText : auth ? AUTHORIZED_TIPS :
+            (auth === false) ? UNAUTHORIZED_TIPS : UNPROMPTED_TIPS
+        })
+        if(auth){
+          this.getCityAndWeather()
+        }else{
+          this.getNow()
         }
-        //权限从有到无
       }
     })
+    this.getNow();
+  },
+  onReady(){
+    console.log("onReady")
+  },
+  onHide(){
+    console.log('onHide')
+  },
+  onUnload() {
+    console.log('onUnload')
   },
   getNow(callback){
     wx.request({
@@ -132,11 +141,18 @@ Page({
   },
   onTapLocation(){
     if(this.data.locationAuthType === UNAUTHORIZED)
-    wx.openSetting()
+    wx.openSetting({
+      success: res=>{
+        let auth = res.authSetting["scope.userLocation"];
+        if(auth){
+          this.getCityAndWeather()
+        }
+      }
+    })
     else
-    this.getLocation();
+      this.getCityAndWeather();
   },
-  getLocation(){
+  getCityAndWeather(){
     wx.getLocation({
       success: res => {
         this.setData({
